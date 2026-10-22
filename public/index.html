@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kaisar API Dashboard & Documentation - Pro Neobrutalism Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&family=Amiri:wght@700&display=swap');
+
+        :root {
+            --bg: #070913;
+            --panel: #0d1322;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            background: var(--bg);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #070913;
+            background-image: 
+                radial-gradient(rgba(245, 158, 11, 0.08) 1.5px, transparent 1.5px),
+                radial-gradient(rgba(99, 102, 241, 0.06) 1.5px, transparent 1.5px);
+            background-size: 32px 32px;
+            background-position: 0 0, 16px 16px;
+            color: #f1f5f9;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #05070f;
+            border-left: 2px solid #1e293b;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #f59e0b;
+            border: 2px solid #000;
+            border-radius: 4px;
+        }
+
+        .neo-box {
+            background: #111827;
+            border: 3.5px solid #000000;
+            box-shadow: 6px 6px 0px #000000;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .neo-box:hover {
+            transform: translate(-1px, -1px);
+            box-shadow: 7px 7px 0px #000000;
+        }
+
+        .neo-btn {
+            border: 3.5px solid #000000;
+            box-shadow: 4px 4px 0px #000000;
+            font-weight: 800;
+            transition: all 0.12s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .neo-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px #000000;
+        }
+
+        .neo-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px #000000;
+        }
+
+        .neo-input {
+            width: 100%;
+            background: #05070f;
+            border: 3.5px solid #000000;
+            box-shadow: 4px 4px 0px #000000;
+            color: #f8fafc;
+            padding: 13px 18px;
+            font-weight: 700;
+            font-size: 13px;
+            outline: none;
+            border-radius: 12px;
+            transition: all 0.15s ease;
+        }
+
+        .neo-input:focus {
+            background: #0d1322;
+            border-color: #f59e0b;
+            box-shadow: 5px 5px 0px #f59e0b;
+        }
+
+        .neo-input::placeholder {
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .neo-select {
+            appearance: none;
+            -webkit-appearance: none;
+            background: #05070f;
+            border: 3.5px solid #000000;
+            box-shadow: 4px 4px 0px #000000;
+            color: #f8fafc;
+            padding: 13px 44px 13px 18px;
+            font-weight: 700;
+            font-size: 13px;
+            outline: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .neo-select:focus {
+            border-color: #f59e0b;
+            box-shadow: 5px 5px 0px #f59e0b;
+        }
+
+        .select-wrap {
+            position: relative;
+        }
+
+        .select-wrap::after {
+            content: "\f078";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            right: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #f59e0b;
+            pointer-events: none;
+            font-size: 11px;
+        }
+
+        .folder-header {
+            cursor: pointer;
+            transition: background 0.15s ease;
+        }
+
+        .folder-header:hover {
+            background: #1e293b;
+        }
+
+        .folder-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.25s ease;
+            opacity: 0;
+        }
+
+        .folder.open .folder-content {
+            max-height: 480px;
+            opacity: 1;
+        }
+
+        .folder.open .folder-arrow {
+            transform: rotate(90deg);
+        }
+
+        .folder-arrow {
+            transition: transform 0.25s ease;
+        }
+
+        .tool-btn {
+            border: 2.5px solid #000;
+            background: #192237;
+            box-shadow: 3.5px 3.5px 0px #000;
+            transition: all 0.15s ease;
+        }
+
+        .tool-btn:hover {
+            background: #232f4b;
+            transform: translate(-2px, -2px);
+            box-shadow: 5px 5px 0px #000;
+        }
+
+        .tool-btn.active {
+            background: #f59e0b;
+            color: #000;
+            border-color: #000;
+            box-shadow: 5px 5px 0px #000;
+            font-weight: 800;
+        }
+
+        .tool-icon {
+            width: 36px;
+            height: 36px;
+            display: grid;
+            place-items: center;
+            flex-shrink: 0;
+            border-radius: 9px;
+            background: #090e18;
+            border: 2.5px solid #000;
+            color: #f59e0b;
+        }
+
+        .tool-btn.active .tool-icon {
+            background: #000;
+            color: #f59e0b;
+        }
+
+        .hero-banner {
+            border: 4px solid #000;
+            box-shadow: 7px 7px 0px #000;
+            background: #111827;
+            position: relative;
+            overflow: hidden;
+            border-radius: 24px;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            min-height: 350px;
+        }
+
+        .hero-video {
+            position: relative;
+            min-height: 350px;
+            overflow: hidden;
+            background: #000;
+            border-left: 4px solid #000;
+        }
+
+        .hero-video video {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.92;
+        }
+
+        .code-box {
+            background: #05070f;
+            border: 3.5px solid #000;
+            box-shadow: 4px 4px 0px #000;
+            border-radius: 14px;
+        }
+
+        pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        #toast-container {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            pointer-events: none;
+        }
+
+        .toast {
+            min-width: 280px;
+            max-width: 400px;
+            padding: 15px 18px;
+            border: 3.5px solid #000;
+            box-shadow: 5px 5px 0px #000;
+            background: #fef08a;
+            color: #000;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 13px;
+            border-radius: 12px;
+            animation: toastIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .toast.error {
+            background: #fecdd3;
+            color: #881337;
+        }
+
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.9); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @media (max-width: 900px) {
+            .hero-grid { grid-template-columns: 1fr; }
+            .hero-video { min-height: 240px; order: -1; border-left: none; border-bottom: 4px solid #000; }
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-20">
+
+    <header class="sticky top-0 z-50 border-b-4 border-black bg-[#070913]/95 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 py-4">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="flex items-center gap-3.5">
+                    <div class="w-13 h-13 rounded-2xl grid place-items-center bg-[#f59e0b] border-3.5 border-black shadow-[4px_4px_0px_#000] text-black text-xl">
+                        <i class="fa-solid fa-code font-black"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h1 class="font-black text-lg tracking-wider text-white">KAISAR API</h1>
+                            <span class="bg-[#ec4899] text-white text-[10px] font-extrabold px-2 py-0.5 rounded-md border-2 border-black shadow-[2px_2px_0px_#000]">PRO V2</span>
+                        </div>
+                        <p class="text-xs text-slate-400 font-bold">High Performance Developer Utility Services</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2 w-full md:w-auto">
+                    <div class="flex-1 md:flex-none flex items-center gap-3 px-4 py-2.5 rounded-xl bg-[#131b2e] border-3.5 border-black shadow-[4px_4px_0px_#000]">
+                        <div class="w-8 h-8 rounded-lg bg-[#38bdf8] border-2 border-black grid place-items-center text-black">
+                            <i class="fa-solid fa-link text-xs"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <p class="text-[9px] uppercase tracking-wider text-slate-400 font-extrabold">Base URL</p>
+                            <code id="base-url-text" class="text-xs text-[#38bdf8] font-mono font-bold block truncate">https://api.kaisar-api.vercel.app</code>
+                        </div>
+                        <button onclick="copyBaseUrl()" class="neo-btn w-8 h-8 rounded-lg bg-[#38bdf8] grid place-items-center text-black text-xs hover:bg-[#7dd3fc]" title="Salin Base URL">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-8 space-y-8">
+
+        <section class="hero-banner">
+            <div class="hero-grid">
+                <div class="hero-content p-6 sm:p-10 flex flex-col justify-center bg-[#111827]">
+                    <div class="inline-flex items-center gap-2.5 w-fit px-3.5 py-1.5 rounded-xl bg-[#f59e0b] border-2.5 border-black shadow-[3px_3px_0px_#000] text-black text-xs font-black tracking-wide mb-5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-black animate-ping"></span>
+                        <span>DEVELOPER PORTAL • NEO-BRUTALISM PRO</span>
+                    </div>
+
+                    <h2 id="greeting-text" class="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">Halo, Dev! 👋</h2>
+                    <p class="text-xs sm:text-sm text-slate-300 font-bold leading-relaxed max-w-xl mt-3.5">Pusat dokumentasi dan pengujian endpoint Kaisar dengan UI super rapi, responsif, dan interaktif.</p>
+
+                    <!-- Enhanced Digital Clock Box with Arabic Touch -->
+                    <div class="datetime-box mt-7 inline-flex items-center gap-3.5 px-5 py-3.5 rounded-2xl bg-[#192237] border-3.5 border-black shadow-[4px_4px_0px_#000] w-fit">
+                        <div class="w-10 h-10 rounded-xl bg-[#06b6d4] border-2.5 border-black grid place-items-center text-black font-bold">
+                            <i class="fa-solid fa-clock-rotate-left text-sm"></i>
+                        </div>
+                        <div>
+                            <div id="live-time" class="text-base font-black text-white font-mono tracking-wider">00:00:00</div>
+                            <div class="flex items-center gap-2 mt-0.5">
+                                <span id="live-date" class="text-[11px] text-[#38bdf8] font-bold">Memuat tanggal...</span>
+                                <span class="text-[11px] text-[#f59e0b] font-bold font-['Amiri']" dir="rtl">البسملة</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hero-video">
+                    <video autoplay muted loop playsinline preload="metadata">
+                        <source src="https://files.catbox.moe/i5n78c.mp4" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+        </section>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-7">
+
+            <!-- Sidebar Folders -->
+            <aside class="lg:col-span-4">
+                <div class="neo-box rounded-2xl p-5 sticky top-24 space-y-3.5">
+                    <div class="flex items-center justify-between px-2 py-1.5 border-b-2.5 border-slate-800 pb-3.5">
+                        <div>
+                            <p class="text-[10px] uppercase tracking-[.18em] text-[#f59e0b] font-black">API FOLDERS</p>
+                            <p class="text-xs text-slate-300 font-bold mt-0.5">Pilih folder layanan di bawah</p>
+                        </div>
+                        <div class="w-10 h-10 rounded-xl bg-[#8b5cf6] border-2.5 border-black shadow-[3px_3px_0px_#000] grid place-items-center text-white">
+                            <i class="fa-solid fa-folder-tree text-xs"></i>
+                        </div>
+                    </div>
+
+                    <!-- Folder AI -->
+                    <div class="folder open" id="folder-ai">
+                        <div onclick="toggleFolder('folder-ai')" class="folder-header flex items-center justify-between px-4 py-3.5 rounded-xl bg-[#192237] border-2.5 border-black shadow-[3px_3px_0px_#000]">
+                            <div class="flex items-center gap-3">
+                                <i class="fa-solid fa-folder-open text-[#34d399] text-sm"></i>
+                                <span class="text-xs font-black text-white">/ai</span>
+                            </div>
+                            <i class="folder-arrow fa-solid fa-chevron-right text-xs text-[#f59e0b]"></i>
+                        </div>
+                        <div class="folder-content space-y-2 pl-2 pt-2">
+                            <button onclick="switchTab('txt2img')" id="btn-txt2img" class="tab-btn tool-btn active w-full text-left px-3.5 py-3 rounded-xl flex items-center gap-3">
+                                <span class="tool-icon"><i class="fa-solid fa-wand-magic text-xs"></i></span>
+                                <span class="flex-1 min-w-0">
+                                    <span class="block text-xs font-extrabold truncate">AI Text to Image</span>
+                                    <code class="block text-[9px] opacity-75 font-mono mt-0.5">/ai/txt2img</code>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Folder Download -->
+                    <div class="folder" id="folder-download">
+                        <div onclick="toggleFolder('folder-download')" class="folder-header flex items-center justify-between px-4 py-3.5 rounded-xl bg-[#192237] border-2.5 border-black shadow-[3px_3px_0px_#000]">
+                            <div class="flex items-center gap-3">
+                                <i class="fa-solid fa-folder text-[#38bdf8] text-sm"></i>
+                                <span class="text-xs font-black text-white">/download</span>
+                            </div>
+                            <i class="folder-arrow fa-solid fa-chevron-right text-xs text-[#f59e0b]"></i>
+                        </div>
+                        <div class="folder-content space-y-2 pl-2 pt-2">
+                            <button onclick="switchTab('aio')" id="btn-aio" class="tab-btn tool-btn w-full text-left px-3.5 py-3 rounded-xl flex items-center gap-3 text-slate-200">
+                                <span class="tool-icon"><i class="fa-solid fa-cloud-arrow-down text-xs"></i></span>
+                                <span class="flex-1 min-w-0">
+                                    <span class="block text-xs font-extrabold truncate">AIO Downloader</span>
+                                    <code class="block text-[9px] text-slate-400 font-mono mt-0.5">/download/aio</code>
+                                </span>
+                            </button>
+                            <button onclick="switchTab('mediafire')" id="btn-mediafire" class="tab-btn tool-btn w-full text-left px-3.5 py-3 rounded-xl flex items-center gap-3 text-slate-200">
+                                <span class="tool-icon"><i class="fa-solid fa-file-arrow-down text-xs"></i></span>
+                                <span class="flex-1 min-w-0">
+                                    <span class="block text-xs font-extrabold truncate">MediaFire Downloader</span>
+                                    <code class="block text-[9px] text-slate-400 font-mono mt-0.5">/download/mediafire</code>
+                                </span>
+                            </button>
+                            <button onclick="switchTab('tiktok')" id="btn-tiktok" class="tab-btn tool-btn w-full text-left px-3.5 py-3 rounded-xl flex items-center gap-3 text-slate-200">
+                                <span class="tool-icon"><i class="fa-brands fa-tiktok text-xs"></i></span>
+                                <span class="flex-1 min-w-0">
+                                    <span class="block text-xs font-extrabold truncate">TikTok Downloader</span>
+                                    <code class="block text-[9px] text-slate-400 font-mono mt-0.5">/download/tiktok</code>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Folder Tools -->
+                    <div class="folder" id="folder-tools">
+                        <div onclick="toggleFolder('folder-tools')" class="folder-header flex items-center justify-between px-4 py-3.5 rounded-xl bg-[#192237] border-2.5 border-black shadow-[3px_3px_0px_#000]">
+                            <div class="flex items-center gap-3">
+                                <i class="fa-solid fa-folder text-[#c084fc] text-sm"></i>
+                                <span class="text-xs font-black text-white">/tools</span>
+                            </div>
+                            <i class="folder-arrow fa-solid fa-chevron-right text-xs text-[#f59e0b]"></i>
+                        </div>
+                        <div class="folder-content space-y-2 pl-2 pt-2">
+                            <button onclick="switchTab('amgen')" id="btn-amgen" class="tab-btn tool-btn w-full text-left px-3.5 py-3 rounded-xl flex items-center gap-3 text-slate-200">
+                                <span class="tool-icon"><i class="fa-solid fa-key text-xs"></i></span>
+                                <span class="flex-1 min-w-0">
+                                    <span class="block text-xs font-extrabold truncate">Alight Motion Generator</span>
+                                    <code class="block text-[9px] text-slate-400 font-mono mt-0.5">/tools/amgen</code>
+                                </span>
+                            </button>
+                            <button onclick="switchTab('amfinder')" id="btn-amfinder" class="tab-btn tool-btn w-full text-left px-3.5 py-3 rounded-xl flex items-center gap-3 text-slate-200">
+                                <span class="tool-icon"><i class="fa-solid fa-wand-magic-sparkles text-xs"></i></span>
+                                <span class="flex-1 min-w-0">
+                                    <span class="block text-xs font-extrabold truncate">AM Preset Finder</span>
+                                    <code class="block text-[9px] text-slate-400 font-mono mt-0.5">/tools/amfinder</code>
+                                </span>
+                            </button>
+                            <button onclick="switchTab('tempmail')" id="btn-tempmail" class="tab-btn tool-btn w-full text-left px-3.5 py-3 rounded-xl flex items-center gap-3 text-slate-200">
+                                <span class="tool-icon"><i class="fa-solid fa-envelope-open-text text-xs"></i></span>
+                                <span class="flex-1 min-w-0">
+                                    <span class="block text-xs font-extrabold truncate">Temporary Mail</span>
+                                    <code class="block text-[9px] text-slate-400 font-mono mt-0.5">/tools/tempmail</code>
+                                </span>
+                            </button>
+                            <button onclick="switchTab('ffguest')" id="btn-ffguest" class="tab-btn tool-btn w-full text-left px-3.5 py-3 rounded-xl flex items-center gap-3 text-slate-200">
+                                <span class="tool-icon"><i class="fa-solid fa-gamepad text-xs"></i></span>
+                                <span class="flex-1 min-w-0">
+                                    <span class="block text-xs font-extrabold truncate">Free Fire Guest Gen</span>
+                                    <code class="block text-[9px] text-slate-400 font-mono mt-0.5">/tools/ffguest</code>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Content Area -->
+            <section class="lg:col-span-8 space-y-7">
+                <div class="neo-box rounded-2xl p-6 sm:p-8">
+                    <div id="form-container"></div>
+                </div>
+
+                <div class="neo-box rounded-2xl p-6 sm:p-8">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                        <div>
+                            <p class="text-[10px] uppercase tracking-[.18em] text-[#f59e0b] font-black">REQUEST BUILDER</p>
+                            <h3 class="text-sm font-black text-white mt-1">Endpoint & Request</h3>
+                        </div>
+                        <button onclick="copyActiveEndpoint()" class="neo-btn bg-[#38bdf8] text-black rounded-xl px-4 py-2 text-xs font-extrabold flex items-center justify-center gap-2 hover:bg-[#7dd3fc]">
+                            <i class="fa-regular fa-copy"></i> Salin Endpoint
+                        </button>
+                    </div>
+
+                    <div class="code-box px-4 py-3.5 flex items-center gap-3 overflow-hidden">
+                        <span class="text-[#f59e0b] flex-shrink-0"><i class="fa-solid fa-terminal text-xs"></i></span>
+                        <span id="active-url-preview" class="text-xs text-[#34d399] font-mono font-bold whitespace-nowrap overflow-x-auto">https://api.kaisar-api.vercel.app/ai/txt2img</span>
+                    </div>
+
+                    <div class="mt-6">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-2">
+                            <span class="text-[10px] uppercase tracking-wider text-slate-400 font-black">Contoh Snippet</span>
+                            <div class="flex items-center gap-1.5 p-1 rounded-xl bg-[#05070f] border-2.5 border-black w-fit">
+                                <button onclick="switchSnippet('curl')" id="btn-snippet-curl" class="text-[11px] px-3.5 py-1.5 rounded-lg bg-[#f59e0b] text-black font-black transition border-2 border-black">cURL</button>
+                                <button onclick="switchSnippet('node')" id="btn-snippet-node" class="text-[11px] px-3.5 py-1.5 rounded-lg text-slate-400 hover:text-white font-black transition">Node.js</button>
+                            </div>
+                        </div>
+                        <div class="code-box p-4 overflow-x-auto">
+                            <pre id="code-snippet" class="text-xs leading-relaxed text-[#38bdf8] font-mono">curl -X GET "..."</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="neo-box rounded-2xl p-6 sm:p-8">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                        <div class="flex items-center gap-3">
+                            <div>
+                                <p class="text-[10px] uppercase tracking-[.18em] text-[#f59e0b] font-black">API RESPONSE</p>
+                                <h3 class="text-sm font-black text-white mt-1">Response Output</h3>
+                            </div>
+                            <span id="response-status" class="hidden text-[10px] px-3 py-1 rounded-full font-black border-2 border-black"></span>
+                        </div>
+                        <button onclick="copyResultJson()" class="neo-btn bg-[#a855f7] text-white rounded-xl px-4 py-2 text-xs font-extrabold flex items-center justify-center gap-2 hover:bg-[#c084fc]">
+                            <i class="fa-regular fa-copy"></i> Salin JSON
+                        </button>
+                    </div>
+
+                    <div id="output-card-container" class="code-box p-5 min-h-[200px]">
+                        <div class="flex flex-col items-center justify-center min-h-[160px] text-center">
+                            <div class="w-12 h-12 rounded-xl bg-[#f59e0b] border-2.5 border-black shadow-[3px_3px_0px_#000] grid place-items-center text-black mb-3">
+                                <i class="fa-solid fa-code font-black"></i>
+                            </div>
+                            <p class="text-xs font-black text-slate-300">Belum ada response</p>
+                            <p class="text-[11px] text-slate-400 mt-1 max-w-xs font-bold">Jalankan endpoint untuk melihat hasil response dalam tampilan visual.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="max-w-7xl mx-auto px-4 pt-10">
+        <div class="neo-box rounded-2xl p-6 sm:p-9 bg-[#111827] space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center border-b-2.5 border-slate-800 pb-7">
+                <div class="md:col-span-6 space-y-2.5">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-[#f59e0b] border-2.5 border-black shadow-[3px_3px_0px_#000] grid place-items-center text-black text-base font-black">
+                            <i class="fa-solid fa-bolt"></i>
+                        </div>
+                        <h3 class="text-base sm:text-lg font-black text-white tracking-wide">KAISAR API</h3>
+                    </div>
+                    <p class="text-xs text-slate-300 font-bold max-w-md leading-relaxed">Platform API developer terdepan dengan layanan utilitas berkecepatan tinggi, stabil, dan selalu update setiap hari.</p>
+                </div>
+
+                <!-- Footer Social Links with Custom Clean SVG Icons -->
+                <div class="md:col-span-6 flex flex-wrap items-center md:justify-end gap-3.5">
+                    <!-- Instagram Button (with Custom SVG) -->
+                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="neo-btn bg-[#ec4899] text-white px-4 py-3 rounded-xl text-xs font-black flex items-center gap-2.5 hover:bg-[#db2777]">
+                        <svg class="w-4 h-4 fill-current flex-shrink-0" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                        Instagram
+                    </a>
+                    <!-- WhatsApp Channel Button (with Custom SVG) -->
+                    <a href="https://whatsapp.com" target="_blank" rel="noopener noreferrer" class="neo-btn bg-[#22c55e] text-black px-4 py-3 rounded-xl text-xs font-black flex items-center gap-2.5 hover:bg-[#16a34a] hover:text-white">
+                        <svg class="w-4 h-4 fill-current flex-shrink-0" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.124-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                        Saluran WhatsApp
+                    </a>
+                    <!-- YouTube Channel Button (with Custom SVG) -->
+                    <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="neo-btn bg-[#ef4444] text-white px-4 py-3 rounded-xl text-xs font-black flex items-center gap-2.5 hover:bg-[#dc2626]">
+                        <svg class="w-4 h-4 fill-current flex-shrink-0" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+                        YouTube Channel
+                    </a>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-1">
+                <p class="text-xs text-slate-400 font-bold">Designed with Neobrutalism Excellence by Kaisarkings © 2026</p>
+                <div class="flex items-center gap-2 text-xs text-slate-200 font-extrabold px-3.5 py-2 rounded-xl bg-[#192237] border-2.5 border-black shadow-[3px_3px_0px_#000]">
+                    <span class="w-2.5 h-2.5 rounded-full bg-[#34d399] border border-black animate-pulse"></span> All systems operational
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div id="toast-container"></div>
+
+    <script>
+        let currentTool = 'txt2img';
+        let currentSnippetType = 'curl';
+        let lastApiResponse = null;
+        const baseUrl = window.location.origin;
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type === 'success' ? '' : 'error'}`;
+            toast.innerHTML = `<i class="fa-solid ${type === 'success' ? 'fa-circle-check text-black' : 'fa-circle-exclamation text-[#881337]'} text-base"></i><span>${escapeHtml(message)}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 250);
+            }, 2600);
+        }
+
+        function escapeHtml(value) {
+            return String(value ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+        }
+
+        function toggleFolder(folderId) {
+            const folder = document.getElementById(folderId);
+            folder.classList.toggle('open');
+        }
+
+        function updateDateTime() {
+            const now = new Date();
+            document.getElementById('live-time').textContent = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+            document.getElementById('live-date').textContent = now.toLocaleDateString('id-ID', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' });
+        }
+
+        function setDynamicGreeting() {
+            const hour = new Date().getHours();
+            let greeting = hour >= 4 && hour < 11 ? 'Selamat Pagi' : hour >= 11 && hour < 15 ? 'Selamat Siang' : hour >= 15 && hour < 18 ? 'Selamat Sore' : 'Selamat Malam';
+            document.getElementById('greeting-text').innerHTML = `${greeting} Dev! 👋`;
+        }
+
+        const forms = {
+            txt2img: {
+                endpoint: '/ai/txt2img',
+                html: `
+                    <div class="flex items-start gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-xl bg-[#34d399] border-3.5 border-black shadow-[3px_3px_0px_#000] grid place-items-center text-black flex-shrink-0"><i class="fa-solid fa-wand-magic text-base font-black"></i></div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-base sm:text-lg font-black text-white">AI Text to Image</h3>
+                                <code class="text-[10px] text-black bg-[#34d399] px-2 py-0.5 rounded font-black border-2 border-black">GET</code>
+                            </div>
+                            <p class="text-xs text-slate-300 font-bold mt-1">Generate gambar berkualitas tinggi menggunakan AI Generator.</p>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="space-y-2">
+                            <label class="text-xs text-[#f59e0b] font-black uppercase tracking-wider">Prompt</label>
+                            <input type="text" id="input-txt2img-prompt" oninput="updateLiveUrl()" placeholder="1girl, masterpiece, cinematic lighting" class="neo-input">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-xs text-[#f59e0b] font-black uppercase tracking-wider">Negative Prompt (Opsional)</label>
+                            <input type="text" id="input-txt2img-negative" oninput="updateLiveUrl()" placeholder="(worst quality, low quality:1.4)" class="neo-input">
+                        </div>
+                    </div>
+                    <button onclick="executeTxt2Img()" class="neo-btn bg-[#34d399] text-black w-full mt-6 rounded-xl py-3.5 text-xs font-black hover:bg-[#6ee7b7]"><i class="fa-solid fa-play mr-2"></i>Generate AI Image</button>
+                `
+            },
+            aio: {
+                endpoint: '/download/aio',
+                html: `
+                    <div class="flex items-start gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-xl bg-[#38bdf8] border-3.5 border-black shadow-[3px_3px_0px_#000] grid place-items-center text-black flex-shrink-0"><i class="fa-solid fa-cloud-arrow-down text-base font-black"></i></div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-base sm:text-lg font-black text-white">AIO Downloader</h3>
+                                <code class="text-[10px] text-black bg-[#38bdf8] px-2 py-0.5 rounded font-black border-2 border-black">GET</code>
+                            </div>
+                            <p class="text-xs text-slate-300 font-bold mt-1">Download media dari berbagai platform secara universal.</p>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs text-[#f59e0b] font-black uppercase tracking-wider">URL Target</label>
+                        <input type="text" id="input-url" oninput="updateLiveUrl()" placeholder="https://..." class="neo-input">
+                    </div>
+                    <button onclick="executeApi('aio')" class="neo-btn bg-[#38bdf8] text-black w-full mt-6 rounded-xl py-3.5 text-xs font-black hover:bg-[#7dd3fc]"><i class="fa-solid fa-play mr-2"></i>Jalankan Test API</button>
+                `
+            },
+            mediafire: {
+                endpoint: '/download/mediafire',
+                html: `
+                    <div class="flex items-start gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-xl bg-[#60a5fa] border-3.5 border-black shadow-[3px_3px_0px_#000] grid place-items-center text-black flex-shrink-0"><i class="fa-solid fa-file-arrow-down text-base font-black"></i></div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-base sm:text-lg font-black text-white">MediaFire Downloader</h3>
+                                <code class="text-[10px] text-black bg-[#60a5fa] px-2 py-0.5 rounded font-black border-2 border-black">GET</code>
+                            </div>
+                            <p class="text-xs text-slate-300 font-bold mt-1">Ambil direct download URL dari file MediaFire.</p>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs text-[#f59e0b] font-black uppercase tracking-wider">URL MediaFire</label>
+                        <input type="text" id="input-url" oninput="updateLiveUrl()" placeholder="https://www.mediafire.com/file/..." class="neo-input">
+                    </div>
+                    <button onclick="executeApi('mediafire')" class="neo-btn bg-[#60a5fa] text-black w-full mt-6 rounded-xl py-3.5 text-xs font-black hover:bg-[#93c5fd]"><i class="fa-solid fa-play mr-2"></i>Jalankan Test API</button>
+                `
+            },
+            tiktok: {
+                endpoint: '/download/tiktok',
+                html: `
+                    <div class="flex items-start gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-xl bg-[#ec4899] border-3.5 border-black shadow-[3px_3px_0px_#000] grid place-items-center text-white flex-shrink-0"><i class="fa-brands fa-tiktok text-base font-black"></i></div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-base sm:text-lg font-black text-white">TikTok Downloader</h3>
+                                <code class="text-[10px] text-white bg-[#ec4899] px-2 py-0.5 rounded font-black border-2 border-black">GET</code>
+                            </div>
+                            <p class="text-xs text-slate-300 font-bold mt-1">Download video, foto, atau audio dari URL TikTok.</p>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs text-[#f59e0b] font-black uppercase tracking-wider">URL TikTok</label>
+                        <input type="text" id="input-url" oninput="updateLiveUrl()" placeholder="https://www.tiktok.com/@user/video/..." class="neo-input">
+                    </div>
+                    <button onclick="executeApi('tiktok')" class="neo-btn bg-[#ec4899] text-white w-full mt-6 rounded-xl py-3.5 text-xs font-black hover:bg-[#f472b6]"><i class="fa-solid fa-play mr-2"></i>Jalankan Test API</button>
+                `
+            },
+            amgen: {
+                endpoint: '/tools/amgen',
+                html: `
+                    <div class="flex items-start gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-xl bg-[#c084fc] border-3.5 border-black shadow-[3px_3px_0px_#000] grid place-items-center text-black flex-shrink-0"><i class="fa-solid fa-key text-base font-black"></i></div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-base sm:text-lg font-black text-white">Alight Motion Generator</h3>
+                                <code class="text-[10px] text-black bg-[#c084fc] px-2 py-0.5 rounded font-black border-2 border-black">TOOL</code>
+                            </div>
+                            <p class="text-xs text-slate-300 font-bold mt-1">Kirim magic link dan verifikasi akun premium Alight Motion.</p>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="space-y-2">
+                            <label class="text-xs text-[#f59e0b] font-black uppercase tracking-wider">Action</label>
+                            <div class="select-wrap">
+                                <select id="input-amgen-action" onchange="toggleAmgenFields(); updateLiveUrl();" class="neo-select w-full">
+                                    <option value="sendlink">Kirim Magic Link (sendlink)</option>
+                                    <option value="veriflink">Verifikasi & Aktivasi (veriflink)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-xs text-[#f59e0b] font-black uppercase tracking-wider">Email Target</label>
+                            <input type="email" id="input-amgen-email" oninput="updateLiveUrl()" placeholder="emailkamu@gmail.com" class="neo-input">
+                        </div>
+                        <div id="field-amgen-link" class="hidden space-y-2">
+                            <label class="text-xs text-[#f59e0b] font-black uppercase tracking-wider">Magic Link / oobCode</label>
+                            <input type="text" id="input-amgen-link" oninput="updateLiveUrl()" placeholder="https://alightcreative.com/auth/..." class="neo-input">
+                        </div>
+                    </div>
+                    <button onclick="executeAmgen()" class="neo-btn bg-[#c084fc] text-black w-full mt-6 rounded-xl py-3.5 text-xs font-black hover:bg-[#d8b4fe]"><i class="fa-solid fa-bolt mr-2"></i>Eksekusi AM Generator</button>
+                `
+            },
+            amfinder: {
+                endpoint: '/tools/amfinder',
+                html: `
+                    <div class="flex items-start gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-xl bg-[#a855f7] border-3.5 border-black shadow-[3px_3px_0px_#000] grid place-items-center text-white flex-shrink-0"><i class="fa-solid fa-wand-magic-sparkles text-base font-black"></i></div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-base sm:text-lg font-black text-white">AM Preset Finder</h3>
+                                <code class="text-[10px] text-white bg-[#a855f7] px-2 py-0.5 rounded font-black border-2 border-black">TOOL</code>
+                            </div>
+                            <p class="text-xs text-slate-300 font-bold mt-1">Cari preset Alight Motion dari video TikTok.</p>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs text-[#f59e0b] font-black uppercase tracking-wider">URL TikTok Target</label>
+                        <input type="text" id="input-url" oninput="updateLiveUrl()" placeholder="https://www.tiktok.com/@user/video/..." class="neo-input">
+                    </div>
+                    <button onclick="executeApi('amfinder')" class="neo-btn bg-[#a855f7] text-white w-full mt-6 rounded-xl py-3.5 text-xs font-black hover:bg-[#c084fc]"><i class="fa-solid fa-magnifying-glass mr-2"></i>Cari Preset</button>
+                `
+            },
+            tempmail: {
+                endpoint: '/tools/tempmail',
+                html: `
+                    <div class="flex items-start gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-xl bg-[#2dd4bf] border-3.5 border-black shadow-[3px_3px_0px_#000] grid place-items-center text-black flex-shrink-0"><i class="fa-solid fa-envelope-open-text text-base font-black"></i></div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-base sm:text-lg font-black text-white">Temporary Mail</h3>
+                                <code class="text-[10px] text-black bg-[#2dd4bf] px-2 py-0.5 rounded font-black border-2 border-black">TOOL</code>
+                            </div>
+                            <p class="text-xs text-slate-300 font-bold mt-1">Buat mailbox sementara dan cek pesan masuk.</p>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="space-y-2">
+                            <label class="text-xs text-[#f59e0b] font-black uppercase tracking-wider">Action</label>
+                            <div class="select-wrap">
+                                <select id="input-action" onchange="toggleTempmailFields(); updateLiveUrl();" class="neo-select w-full">
+                                    <option value="create">Buat Email Baru (Create)</option>
+                                    <option value="inbox">Cek Inbox (Inbox)</option>
+                                    <option value="message">Baca Pesan (Message)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="field-username" class="space-y-2">
+                            <label class="text-xs text-[#f59e0b] font-black uppercase tracking-wider">Username / Mailbox</label>
+                            <input type="text" id="input-username" oninput="updateLiveUrl()" placeholder="contoh: kaisarkings" class="neo-input">
+                        </div>
+                        <div id="field-messageid" class="hidden space-y-2">
+                            <label class="text-xs text-[#f59e0b] font-black uppercase tracking-wider">Message ID / Key</label>
+                            <input type="text" id="input-messageid" oninput="updateLiveUrl()" placeholder="ID pesan dari inbox" class="neo-input">
+                        </div>
+                    </div>
+                    <button onclick="executeTempmail()" class="neo-btn bg-[#2dd4bf] text-black w-full mt-6 rounded-xl py-3.5 text-xs font-black hover:bg-[#5eead4]"><i class="fa-solid fa-paper-plane mr-2"></i>Proses Mail</button>
+                `
+            },
+            ffguest: {
+                endpoint: '/tools/ffguest',
+                html: `
+                    <div class="flex items-start gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-xl bg-[#f97316] border-3.5 border-black shadow-[3px_3px_0px_#000] grid place-items-center text-white flex-shrink-0"><i class="fa-solid fa-gamepad text-base font-black"></i></div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-base sm:text-lg font-black text-white">Free Fire Guest Generator</h3>
+                                <code class="text-[10px] text-white bg-[#f97316] px-2 py-0.5 rounded font-black border-2 border-black">TOOL</code>
+                            </div>
+                            <p class="text-xs text-slate-300 font-bold mt-1">Generate akun guest secara otomatis.</p>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-xs text-[#f59e0b] font-black uppercase tracking-wider">Jumlah Akun (1 - 10)</label>
+                        <input type="number" id="input-count" value="1" min="1" max="10" oninput="updateLiveUrl()" class="neo-input">
+                    </div>
+                    <button onclick="executeApi('ffguest')" class="neo-btn bg-[#f97316] text-white w-full mt-6 rounded-xl py-3.5 text-xs font-black hover:bg-[#fb923c]"><i class="fa-solid fa-bolt mr-2"></i>Generate Akun</button>
+                `
+            }
+        };
+
+        function switchTab(tool) {
+            currentTool = tool;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            const activeButton = document.getElementById(`btn-${tool}`);
+            if (activeButton) activeButton.classList.add('active');
+            document.getElementById('form-container').innerHTML = forms[tool].html;
+            updateLiveUrl();
+        }
+
+        function toggleTempmailFields() {
+            const action = document.getElementById('input-action')?.value;
+            const fieldUser = document.getElementById('field-username');
+            const fieldMsg = document.getElementById('field-messageid');
+            if (!fieldUser || !fieldMsg) return;
+            fieldMsg.style.display = action === 'message' ? 'block' : 'none';
+        }
+
+        function toggleAmgenFields() {
+            const action = document.getElementById('input-amgen-action')?.value;
+            const fieldLink = document.getElementById('field-amgen-link');
+            if (!fieldLink) return;
+            fieldLink.style.display = action === 'veriflink' ? 'block' : 'none';
+        }
+
+        function getConstructedUrl() {
+            const endpoint = forms[currentTool].endpoint;
+            let queryStr = '';
+            if (currentTool === 'txt2img') {
+                const prompt = document.getElementById('input-txt2img-prompt')?.value.trim() || '';
+                const negative = document.getElementById('input-txt2img-negative')?.value.trim() || '';
+                queryStr = `?prompt=${encodeURIComponent(prompt)}`;
+                if (negative) queryStr += `&negative=${encodeURIComponent(negative)}`;
+            } else if (currentTool === 'aio' || currentTool === 'mediafire' || currentTool === 'tiktok' || currentTool === 'amfinder') {
+                const val = document.getElementById('input-url')?.value.trim() || '';
+                if (val) queryStr = `?url=${encodeURIComponent(val)}`;
+            } else if (currentTool === 'ffguest') {
+                const val = document.getElementById('input-count')?.value || 1;
+                queryStr = `?count=${encodeURIComponent(val)}`;
+            } else if (currentTool === 'tempmail') {
+                const action = document.getElementById('input-action')?.value || 'create';
+                queryStr = `?action=${encodeURIComponent(action)}`;
+                if (action === 'inbox' || action === 'message') {
+                    const user = document.getElementById('input-username')?.value.trim();
+                    if (user) queryStr += `&username=${encodeURIComponent(user)}`;
+                }
+                if (action === 'message') {
+                    const msgId = document.getElementById('input-messageid')?.value.trim();
+                    if (msgId) queryStr += `&id=${encodeURIComponent(msgId)}`;
+                }
+            } else if (currentTool === 'amgen') {
+                const action = document.getElementById('input-amgen-action')?.value || 'sendlink';
+                const email = document.getElementById('input-amgen-email')?.value.trim() || '';
+                queryStr = `?action=${encodeURIComponent(action)}&email=${encodeURIComponent(email)}`;
+                if (action === 'veriflink') {
+                    const link = document.getElementById('input-amgen-link')?.value.trim() || '';
+                    queryStr += `&link=${encodeURIComponent(link)}`;
+                }
+            }
+            return `${baseUrl}${endpoint}${queryStr}`;
+        }
+
+        function updateLiveUrl() {
+            const fullUrl = getConstructedUrl();
+            document.getElementById('active-url-preview').textContent = fullUrl;
+            document.getElementById('code-snippet').textContent = currentSnippetType === 'curl' ? `curl -X GET "${fullUrl}"` : `const res = await fetch("${fullUrl}");\nconst data = await res.json();\nconsole.log(data);`;
+        }
+
+        function switchSnippet(type) {
+            currentSnippetType = type;
+            document.getElementById('btn-snippet-curl').className = type === 'curl' ? 'text-[11px] px-3.5 py-1.5 rounded-lg bg-[#f59e0b] text-black font-black transition border-2 border-black' : 'text-[11px] px-3.5 py-1.5 rounded-lg text-slate-400 hover:text-white font-black transition';
+            document.getElementById('btn-snippet-node').className = type === 'node' ? 'text-[11px] px-3.5 py-1.5 rounded-lg bg-[#f59e0b] text-black font-black transition border-2 border-black' : 'text-[11px] px-3.5 py-1.5 rounded-lg text-slate-400 hover:text-white font-black transition';
+            updateLiveUrl();
+        }
+
+        function renderStructuredCard(data) {
+            lastApiResponse = data;
+            const statusBadge = document.getElementById('response-status');
+            const container = document.getElementById('output-card-container');
+            statusBadge.classList.remove('hidden');
+
+            if (data.status) {
+                statusBadge.className = 'text-[10px] px-3 py-1 rounded-full font-black bg-[#34d399] text-black border-2 border-black shadow-[2px_2px_0px_#000]';
+                statusBadge.innerText = 'SUCCESS • 200';
+            } else {
+                statusBadge.className = 'text-[10px] px-3 py-1 rounded-full font-black bg-[#fecdd3] text-[#881337] border-2 border-black shadow-[2px_2px_0px_#000]';
+                statusBadge.innerText = 'FAILED / ERROR';
+            }
+
+            if (!data.status) {
+                container.innerHTML = `<div class="rounded-xl p-5 bg-[#fecdd3]/10 border-3 border-[#881337]"><div class="flex items-start gap-3"><div class="w-9 h-9 rounded-lg bg-[#fecdd3] border-2 border-black grid place-items-center flex-shrink-0 text-[#881337] font-black"><i class="fa-solid fa-triangle-exclamation text-xs"></i></div><div><p class="text-xs font-black text-[#fecdd3]">Gagal Memproses</p><p class="text-[11px] text-slate-300 font-bold mt-1">${escapeHtml(data.message || 'Terjadi kesalahan sistem.')}</p></div></div></div>`;
+                return;
+            }
+
+            let html = '';
+            if (currentTool === 'txt2img' && data.result) {
+                const r = data.result;
+                html += `<div class="rounded-xl p-4 bg-[#05070f] border-3.5 border-black shadow-[4px_4px_0px_#000] space-y-3 text-center"><p class="text-xs font-black text-white">Hasil AI Text-to-Image:</p><div class="bg-black p-2 rounded-xl border-2.5 border-black inline-block"><img src="${escapeHtml(r.result_image_url)}" class="max-h-[350px] w-auto rounded-lg mx-auto" alt="AI Image Result"></div><a href="${escapeHtml(r.result_image_url)}" target="_blank" download="ai-image.png" class="neo-btn bg-[#34d399] text-black block text-center w-full py-3 rounded-xl text-xs font-black hover:bg-[#6ee7b7]">Buka / Download Gambar</a></div>`;
+            } else if (currentTool === 'tiktok' && data.result) {
+                const res = data.result;
+                html += `<div class="space-y-4"><div class="rounded-xl p-4 bg-[#05070f] border-3.5 border-black shadow-[4px_4px_0px_#000] flex items-center gap-3">${res.author?.avatar ? `<img src="${escapeHtml(res.author.avatar)}" class="w-12 h-12 rounded-full border-2.5 border-black object-cover">` : `<div class="w-12 h-12 rounded-full bg-[#f59e0b] border-2.5 border-black grid place-items-center text-black font-black"><i class="fa-solid fa-user"></i></div>`}<div class="min-w-0"><h4 class="font-black text-sm text-white truncate">${escapeHtml(res.author?.nickname || 'TikTok User')}</h4><p class="text-[10px] text-slate-400 font-bold truncate">@${escapeHtml(res.author?.fullname || '-')}</p></div></div><div class="text-xs text-slate-200 font-bold leading-relaxed">${escapeHtml(res.title || '-')}</div>${res.video_url ? `<div class="rounded-xl overflow-hidden border-3.5 border-black shadow-[4px_4px_0px_#000] bg-black flex justify-center"><video src="${escapeHtml(res.video_url)}" controls playsinline class="max-h-[360px] w-auto max-w-full"></video></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-3"><a href="${escapeHtml(res.video_url)}" target="_blank" rel="noopener noreferrer" class="neo-btn bg-[#f59e0b] text-black text-center py-3.5 rounded-xl text-xs font-black hover:bg-[#fbbf24]"><i class="fa-solid fa-download mr-1.5"></i>Download Video</a>${res.audio_url ? `<a href="${escapeHtml(res.audio_url)}" target="_blank" rel="noopener noreferrer" class="neo-btn bg-[#38bdf8] text-black text-center py-3.5 rounded-xl text-xs font-black hover:bg-[#7dd3fc]"><i class="fa-solid fa-music mr-1.5"></i>Download Audio</a>` : ''}</div>` : ''}</div>`;
+            } else if (currentTool === 'mediafire' && data.result) {
+                const r = data.result;
+                html += `<div class="rounded-xl p-5 bg-[#05070f] border-3.5 border-black shadow-[4px_4px_0px_#000]"><div class="flex items-start gap-3"><div class="w-10 h-10 rounded-xl bg-[#38bdf8] border-2.5 border-black grid place-items-center text-black font-black"><i class="fa-solid fa-file"></i></div><div class="min-w-0"><p class="text-sm font-black text-white truncate">${escapeHtml(r.fileName || 'File MediaFire')}</p><p class="text-[10px] text-slate-400 font-bold mt-1">MediaFire File</p></div></div><div class="grid grid-cols-2 gap-3 mt-5"><div class="rounded-xl bg-[#111827] border-2.5 border-black p-3"><p class="text-[9px] text-slate-400 font-black uppercase">Ukuran</p><p class="text-xs text-[#34d399] font-black mt-1">${escapeHtml(r.fileSize || '-')}</p></div><div class="rounded-xl bg-[#111827] border-2.5 border-black p-3"><p class="text-[9px] text-slate-400 font-black uppercase">Upload</p><p class="text-xs text-[#34d399] font-black mt-1">${escapeHtml(r.uploadDate || '-')}</p></div></div><a href="${escapeHtml(r.downloadUrl || '#')}" target="_blank" rel="noopener noreferrer" class="neo-btn bg-[#34d399] text-black block text-center w-full py-3.5 rounded-xl text-xs font-black mt-5 hover:bg-[#6ee7b7]"><i class="fa-solid fa-download mr-1.5"></i>Unduh File Sekarang</a></div>`;
+            } else if (currentTool === 'ffguest' && data.result) {
+                const accounts = Array.isArray(data.result.accounts) ? data.result.accounts : [];
+                html += `<div class="space-y-3">`;
+                accounts.forEach(acc => {
+                    const credentials = `UID: ${acc.uid} | Pass: ${acc.password}`;
+                    html += `<div class="rounded-xl p-4 bg-[#05070f] border-3.5 border-black shadow-[4px_4px_0px_#000]"><div class="flex items-center justify-between gap-3"><div class="min-w-0"><p class="text-[10px] text-[#f59e0b] font-black uppercase">Account #${escapeHtml(acc.index)}</p><p class="text-xs text-white font-mono font-bold mt-2">UID: ${escapeHtml(acc.uid)}</p><p class="text-[11px] text-slate-400 font-mono font-bold mt-1 truncate">Pass: ${escapeHtml(acc.password)}</p></div><button onclick="copyText('${String(credentials).replace(/\\/g, '\\\\').replace(/'/g, "\\'")}')" class="neo-btn bg-[#f59e0b] text-black rounded-xl px-3 py-2 text-xs font-black flex-shrink-0 hover:bg-[#fbbf24]"><i class="fa-regular fa-copy mr-1"></i>Salin</button></div></div>`;
+                });
+                html += `</div>`;
+            } else {
+                html += `<div class="rounded-xl p-4 bg-[#05070f] border-3.5 border-black shadow-[4px_4px_0px_#000]"><div class="flex flex-wrap items-center justify-between gap-2 mb-3"><span class="inline-flex items-center gap-2 text-xs text-[#34d399] font-black"><span class="w-2 h-2 rounded-full bg-[#34d399]"></span>Request Berhasil</span><span class="text-[10px] text-slate-400 font-bold">Provider: ${escapeHtml(data.provider || 'kaisar')}</span></div><div class="code-box p-4 overflow-auto max-h-[350px]"><pre class="text-xs leading-relaxed text-[#38bdf8] font-mono">${escapeHtml(JSON.stringify(data.result || data.data || data, null, 2))}</pre></div></div>`;
+            }
+            container.innerHTML = html;
+        }
+
+        async function executeApi(tool) {
+            const endpointUrl = getConstructedUrl();
+            const container = document.getElementById('output-card-container');
+            container.innerHTML = `<div class="flex flex-col items-center justify-center min-h-[170px]"><div class="w-12 h-12 rounded-xl bg-[#f59e0b] border-2.5 border-black shadow-[3px_3px_0px_#000] grid place-items-center mb-4 text-black"><i class="fa-solid fa-circle-notch fa-spin text-lg font-black"></i></div><p class="text-xs text-white font-black">Memproses request...</p><p class="text-[11px] text-slate-400 font-bold mt-1">Menunggu response dari server</p></div>`;
+            try {
+                const res = await fetch(endpointUrl);
+                const data = await res.json();
+                renderStructuredCard(data);
+            } catch (err) {
+                renderStructuredCard({ status: false, message: err.message });
+            }
+        }
+
+        function executeTempmail() {
+            executeApi('tempmail');
+        }
+
+        function executeAmgen() {
+            executeApi('amgen');
+        }
+
+        function executeTxt2Img() {
+            executeApi('txt2img');
+        }
+
+        async function copyText(text) {
+            try {
+                await navigator.clipboard.writeText(text);
+                showToast('Berhasil disalin ke clipboard.');
+            } catch {
+                showToast('Clipboard tidak tersedia.', 'error');
+            }
+        }
+
+        async function copyActiveEndpoint() {
+            await copyText(getConstructedUrl());
+        }
+
+        async function copyResultJson() {
+            if (!lastApiResponse) {
+                showToast('Belum ada response untuk disalin.', 'error');
+                return;
+            }
+            await copyText(JSON.stringify(lastApiResponse, null, 2));
+        }
+
+        async function copyBaseUrl() {
+            await copyText(baseUrl);
+        }
+
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+        setDynamicGreeting();
+        switchTab('txt2img');
+    </script>
+</body>
+</html>
