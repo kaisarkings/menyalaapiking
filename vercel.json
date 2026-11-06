@@ -6,6 +6,7 @@
     { "source": "/tools/amfinder", "destination": "/api/index" },
     { "source": "/tools/tempmail", "destination": "/api/index" },
     { "source": "/tools/ffguest", "destination": "/api/index" },
+    { "source": "/tools/amgen", "destination": "/api/index" },
     { "source": "/tools/amgen", "destination": "/api/index" }
   ]
 }
